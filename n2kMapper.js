@@ -18,6 +18,14 @@ var toDelta = function (n2k, state) {
       }
       src_state = state[n2k_src]
     }
+
+    var timestamp = n2k.timestamp.substring(0, 10)
+      + 'T' + n2k.timestamp.substring(11, n2k.timestamp.length)
+    // Add Z suffix if timestamp does not have timezone info.
+    if (timestamp.length === 19 || timestamp.length === 23) {
+      timestamp = timestamp + "Z"
+    }
+
     var result = {
       updates: [
         {
@@ -27,10 +35,7 @@ var toDelta = function (n2k, state) {
             pgn: Number(n2k.pgn),
             src: n2k.src.toString()
           },
-          timestamp:
-            n2k.timestamp.substring(0, 10) +
-            'T' +
-            n2k.timestamp.substring(11, n2k.timestamp.length),
+          timestamp: timestamp,
           values: toValuesArray(theMappings, n2k, src_state)
         }
       ]
